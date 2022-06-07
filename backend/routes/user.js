@@ -46,6 +46,10 @@ router.post("/login", async(req, res) => {
         redirect_uri: config[provider].redirect_uri,
         grant_type: config[provider].grant_type,
         // "scope": config[provider].scope
+    }, {
+        headers: {
+            Accept: "application/json",
+        }
     });
 
     if (!response) return res.sendStatus(500);
@@ -56,13 +60,15 @@ router.post("/login", async(req, res) => {
 
     const onlyOauth = !response.data.id_token;
     if (onlyOauth) {
-        let accesstoken = response.data.split("=")[1].split("&")[0];
+        //let accesstoken = response.data.split("=")[1].split("&")[0];
+        let accesstoken = response.data.access_token;
         console.log(accesstoken);
 
         const userResponse = await http.get(
             config[provider].user_endpoint, {
                 headers: {
                     authorization: "Bearer " + accesstoken,
+
                 },
             }
         );
