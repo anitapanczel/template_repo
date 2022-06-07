@@ -12,7 +12,8 @@ const config = {
         redirect_uri: "http://localhost:3000/callback",
         token_endpoint: "https://oauth2.googleapis.com/token",
         grant_type: "authorization_code",
-        scope: "openid",
+        user_endpoint: null,
+        user_id: null,
     },
 
     github: {
@@ -21,8 +22,8 @@ const config = {
         redirect_uri: "http://localhost:3000/callback/github",
         token_endpoint: "https://github.com/login/oauth/access_token",
         grant_type: "authorization_code",
-        scope: "user",
         user_endpoint: "https://api.github.com/user",
+        user_id: "id",
     },
 };
 
@@ -45,7 +46,6 @@ router.post("/login", async(req, res) => {
         client_secret: config[provider].client_secret,
         redirect_uri: config[provider].redirect_uri,
         grant_type: config[provider].grant_type,
-        // "scope": config[provider].scope
     }, {
         headers: {
             Accept: "application/json",
@@ -68,7 +68,6 @@ router.post("/login", async(req, res) => {
             config[provider].user_endpoint, {
                 headers: {
                     authorization: "Bearer " + accesstoken,
-
                 },
             }
         );
@@ -76,8 +75,8 @@ router.post("/login", async(req, res) => {
 
         if (!response) return res.sendStatus(500);
         if (response.status !== 200) return res.sendStatus(401);
-
-        openId = userResponse.data.id;
+        const id = config[provider].user_id,
+            openId = userResponse.data[id];
     } else {
         const decoded = jwt.decode(response.data.id_token);
         if (!decoded) return res.sendStatus(500);
@@ -92,8 +91,8 @@ router.post("/login", async(req, res) => {
             [provider]: openId,
         },
     }, {
-        upsert: true,
         new: true,
+        upsert: true,
     });
 
     const token = jwt.sign({ userId: user._id, providers: user.providers },
