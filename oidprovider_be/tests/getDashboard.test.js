@@ -1,9 +1,11 @@
+require('dotenv').config();
 const app = require('../app')
 const mockserver = require('supertest');
 const mongoose = require('mongoose');
 const User = require('../models/user.js')
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const { startDb, stopDb, deleteAll } = require('./util/inMemoryDb')
+const jwt = require("jsonwebtoken");
 
 describe('/api/dashboard get tests', () => {
 
@@ -28,7 +30,8 @@ describe('/api/dashboard get tests', () => {
         // given
         const newUser = new User({ username: 'macska', googleId: '1234567' });
         await newUser.save();
-        client.set('authorization', newUser._id);
+        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
+        client.set('authorization', token);
 
         // when
         const response = await client.get('/api/dashboards');
