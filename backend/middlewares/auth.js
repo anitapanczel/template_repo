@@ -1,9 +1,17 @@
+const jwt = require("jsonwebtoken");
+
 const auth = (middlewareParams) => (req, res, next) => {
     //console.log("authenticating... ");
-    const userid = req.header("authorization");
-    res.locals.userid = userid;
-    if (middlewareParams.block && !res.locals.userid) return res.sendStatus(401);
-    next();
+
+    const token = req.header("authorization");
+    jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
+        if (middlewareParams.block && error) return res.sendStatus(401);
+        res.locals.user = user;
+        next();
+
+    });
+
+
 };
 
 module.exports = auth;

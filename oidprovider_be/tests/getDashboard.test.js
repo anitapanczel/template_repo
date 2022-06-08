@@ -46,7 +46,8 @@ describe('/api/dashboard get tests', () => {
         // given
         const newUser = new User({ username: 'macska', googleId: '1234567' });
         await newUser.save();
-        client.set('authorization', newUser._id);
+        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET);
+        client.set('authorization', token);
         await User.deleteMany();
 
         // when
