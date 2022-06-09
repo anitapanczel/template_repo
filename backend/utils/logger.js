@@ -1,3 +1,4 @@
+/*
 const pino = require('pino');
 const { createPinoBrowserSend, createWriteStream } = require('pino-logflare');
 
@@ -20,5 +21,5 @@ const logger = pino({
         }
     }
 }, stream);
-
 module.exports = logger;
+*/

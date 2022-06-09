@@ -46,3 +46,6 @@ app.get('/api/both', auth({ block: false }), (req, res) => {
 
 
 app.use(errorhandler);
+
+
+module.exports = app;

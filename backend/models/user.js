@@ -13,12 +13,10 @@ const dashboardSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
     username: { type: String }, //empty string is not enough
-    /*googleId: { type: String, unique: true, required: true }, //empty is not enough, maybe validation !!!unique*/
     providers: {
         google: { type: String },
         github: { type: String }
     },
-    //password: { type: String, required: true },
     dashboards: [dashboardSchema], // empty list is default?
 });
 
