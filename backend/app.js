@@ -19,7 +19,7 @@ app.use(
 app.use(express.json());
 
 app.use(
-    morgan(':method :url :status :res[content-length] - :response-time ms')
+    morgan(':method :url :status :res[content-length] :req[header] - :response-time ms')
 );
 
 app.use('/api/dashboards', dashboardRoutes);

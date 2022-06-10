@@ -1,34 +1,12 @@
 const router = require("express").Router();
-const httpModule = require("../utils/http");
+const http = require("../utils/http");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const auth = require("../middlewares/auth");
+const config = require('../app.config')
+//const http = httpModule();
 
-const http = httpModule();
-
-const config = {
-  google: {
-    client_id: process.env.CLIENT_ID_GOOGLE,
-    client_secret: process.env.CLIENT_SECRET_GOOGLE,
-    redirect_uri: "http://localhost:3000/callback",
-    token_endpoint: "https://oauth2.googleapis.com/token",
-    grant_type: "authorization_code",
-    user_endpoint: null,
-    user_id: null,
-  },
-
-  github: {
-    client_id: process.env.CLIENT_ID_GITHUB, //appid?
-    client_secret: process.env.CLIENT_SECRET_GITHUB,
-    redirect_uri: "http://localhost:3000/callback/github",
-    token_endpoint: "https://github.com/login/oauth/access_token",
-    grant_type: "authorization_code",
-    user_endpoint: "https://api.github.com/user",
-    user_id: "id",
-  },
-};
-
-router.post("/login", async (req, res) => {
+router.post("/login", auth({block: false}), async (req, res) => {
   const payload = req.body;
   if (!payload) return res.sendStatus(400);
 
@@ -37,16 +15,16 @@ router.post("/login", async (req, res) => {
 
   if (!code || !provider) return res.sendStatus(400);
 
-  if (!Object.keys(config).includes(provider)) return res.sendStatus(400);
+  if (!Object.keys(config.auth).includes(provider)) return res.sendStatus(400);
 
   const response = await http.post(
-    config[provider].token_endpoint,
+    config.auth[provider].token_endpoint,
     {
       code: code,
-      client_id: config[provider].client_id,
-      client_secret: config[provider].client_secret,
-      redirect_uri: config[provider].redirect_uri,
-      grant_type: config[provider].grant_type,
+      client_id: config.auth[provider].client_id,
+      client_secret: config.auth[provider].client_secret,
+      redirect_uri: config.auth[provider].redirect_uri,
+      grant_type: config.auth[provider].grant_type,
     },
     {
       headers: {
@@ -65,7 +43,7 @@ router.post("/login", async (req, res) => {
     let accesstoken = response.data.access_token;
     console.log(accesstoken);
 
-    const userResponse = await http.get(config[provider].user_endpoint, {
+    const userResponse = await http.get(config.auth[provider].user_endpoint, {
       headers: {
         authorization: "Bearer " + accesstoken,
       },
@@ -74,7 +52,7 @@ router.post("/login", async (req, res) => {
 
     if (!userResponse) return res.sendStatus(500);
     if (userResponse.status !== 200) return res.sendStatus(401);
-    const id = config[provider].user_id;
+    const id = config.auth[provider].user_id;
     openId = userResponse.data[id];
   } else {
     const decoded = jwt.decode(response.data.id_token);

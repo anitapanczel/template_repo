@@ -14,8 +14,8 @@ const dashboardSchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
     username: { type: String }, //empty string is not enough
     providers: {
-        google: { type: String },
-        github: { type: String }
+        google: { type: String, sparse: true, unique: true },
+        github: { type: String, sparse: true, unique: true }
     },
     dashboards: [dashboardSchema], // empty list is default?
 });

@@ -4,7 +4,7 @@ const mockserver = require('supertest');
 const mongoose = require('mongoose');
 const User = require('../models/user.js')
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { startDb, stopDb, deleteAll } = require('./util/inMemoryDb')
+const { startDb, stopDb, deleteAll } = require('./utils/inMemoryDb')
 const jwt = require("jsonwebtoken");
 
 describe('/api/dashboard get tests', () => {
