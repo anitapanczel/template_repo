@@ -1,21 +1,26 @@
 import "./App.css";
-import NumberPresenter from "./components/NumberPresenter";
-import NumberModifier from "./components/NumberModifier";
-import { useCounter } from "./components/CounterProvider";
+import { useCounter } from "./providers/counter.jsx";
+import { useNavigate, Routes, Route } from "react-router-dom";
+import About from "./pages/About";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Navbar from "./components/Navbar";
 
 function App() {
-  const { value, increment, decrement } = useCounter();
+  const navigate = useNavigate();
+
   return (
     <div className="App">
-      <p>Change the value</p>
-      <p>{value}</p>
-      <button onClick={increment}>+</button>
-      <button onClick={decrement}>-</button>
-
-      <NumberPresenter />
-      <NumberModifier />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </div>
   );
 }
 
 export default App;
+
+
