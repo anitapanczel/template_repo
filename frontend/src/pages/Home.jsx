@@ -3,8 +3,8 @@ import { useCounter } from "../hooks/useCounter";
 import { useCounter as useCounterGlobal } from "../providers/counter.jsx";
 
 const Home = () => {
-    const {counter, increment, decrement} = useCounter();
-    const {value, increment: goUp, decrement: goDown} = useCounterGlobal();
+  const { counter, increment, decrement } = useCounter('Home');
+  const { value, increment: goUp, decrement: goDown } = useCounterGlobal();
 
   return (
     <>
@@ -12,6 +12,7 @@ const Home = () => {
       <button onClick={increment}>+</button>
       <button onClick={decrement}>-</button>
       <p>Value: {counter}</p>
+
       <button onClick={goUp}>+</button>
       <button onClick={goDown}>-</button>
       <p>Value: {value}</p>

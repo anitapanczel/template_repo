@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useCounter } from "../hooks/useCounter";
-import { useCounter as useCounterGlobal } from "../providers/counter.jsx";
+import { useCounter as useGlobalCounter } from "../providers/counter.jsx";
 
 const Profile = () => {
-  const {counter, increment, decrement} = useCounter();
-  const {value, increment: goUp, decrement: goDown} = useCounterGlobal();
+  const { counter, increment, decrement } = useCounter('Profile');
+  const { value, increment: goUp, decrement: goDown } = useGlobalCounter();
 
   return (
     <>
