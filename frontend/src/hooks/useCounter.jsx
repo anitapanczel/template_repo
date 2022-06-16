@@ -4,7 +4,6 @@ export const useCounter = (componentName) => {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    
     localStorage.setItem(`counter ${componentName}`, counter);
   }, [counter]);
 

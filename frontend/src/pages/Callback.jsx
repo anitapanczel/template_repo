@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../providers/auth";
-import Home from "./Home";
 
 const Callback = () => {
   const { login } = useAuth();

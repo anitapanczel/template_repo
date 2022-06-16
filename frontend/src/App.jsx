@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import Callback from "./pages/Callback";
+import Protected from "./components/Protected";
 
 function App() {
   const navigate = useNavigate();
@@ -17,12 +18,17 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/callback" element={<Callback />} />
         <Route path="/about" element={<About />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={
+            <Protected>
+              <Profile />
+            </Protected>
+          }
+        />
       </Routes>
     </div>
   );
 }
 
 export default App;
-
-
