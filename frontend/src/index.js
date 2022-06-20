@@ -8,7 +8,6 @@ import { AuthProvider } from "./providers/auth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
     <AuthProvider>
       <CounterProvider>
         <BrowserRouter>
@@ -16,5 +15,4 @@ root.render(
         </BrowserRouter>
       </CounterProvider>
     </AuthProvider>
-  </React.StrictMode>
 );

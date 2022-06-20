@@ -6,7 +6,7 @@ const Navbar = () => {
   const { auth, token, logout } = useAuth();
   const navigate = useNavigate();
   const nav = (path) => {
-    console.log("rerouting..."); // elagazás, ciklusok, bármit meg lehet itt írni, hogy a végén legyen, hogy meghívódik a navigate a path-szal
+    //console.log("rerouting..."); // elagazás, ciklusok, bármit meg lehet itt írni, hogy a végén legyen, hogy meghívódik a navigate a path-szal
     navigate(path);
   };
   return (

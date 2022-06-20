@@ -7,10 +7,9 @@ import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import Callback from "./pages/Callback";
 import Protected from "./components/Protected";
+import Register from "./pages/Register";
 
 function App() {
-  const navigate = useNavigate();
-
   return (
     <div className="App">
       <Navbar />
@@ -23,6 +22,14 @@ function App() {
           element={
             <Protected>
               <Profile />
+            </Protected>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Protected>
+              <Register />
             </Protected>
           }
         />

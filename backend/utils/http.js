@@ -2,7 +2,7 @@ const { default: axios } = require("axios");
 
 const http = () => {
     const instance = axios.create({
-        baseUrl: '',
+        baseURL: '',
         timeout: 3000,
     });
 

@@ -1,15 +1,20 @@
-import { useContext, createContext, useState } from "react";
+import React, { useContext, createContext, useState, useEffect } from "react";
 import axios from "axios";
-import { useEffect } from "react";
+import jwt from "jwt-decode";
+import { todoapi } from "../api/todoapi";
+
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
+  const { post } = todoapi();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setToken(token);
+    const tokenInStorage = localStorage.getItem("token");
+    if (tokenInStorage) {
+      setToken(tokenInStorage);
+      setUser(jwt(tokenInStorage));
     }
   }, []);
 
@@ -26,7 +31,8 @@ const AuthProvider = ({ children }) => {
     // searchParams.append("prompt", "select_account")
 
     const fullUrl = googleBaseUrl + "?" + searchParams.toString();
-    window.open(fullUrl, "_self");
+    //window.open(fullUrl, "_self"); helyett a következő
+    window.location.href = fullUrl;
   };
 
   const login = async (code, provider) => {
@@ -40,6 +46,7 @@ const AuthProvider = ({ children }) => {
       );
       setToken(response.data.token);
       localStorage.setItem("token", response.data.token);
+      setUser(jwt(response.data.token));
     } catch (error) {
       console.log(error);
       setToken(null);
@@ -51,7 +58,16 @@ const AuthProvider = ({ children }) => {
     setToken(null);
   };
 
-  const contextValue = { token, auth, login, logout };
+  const register = async (username) => {
+    const response = post("/user/create", { username });
+    if (response?.status === 200) {
+      setToken(response.data.token);
+      localStorage.setItem("token", response.data.token);
+      setUser(jwt(response.data.token));
+    }
+  };
+
+  const contextValue = { token, auth, login, logout, user, register };
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
